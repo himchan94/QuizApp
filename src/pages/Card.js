@@ -1,16 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-const Card = () => {
+const Card = ({ ranking, ord, highlight }) => {
+  const { name, message } = ranking;
+
   return (
     <>
       <Container>
-        <Rank>
-          <h1>1등</h1>
+        <Rank highlight={highlight}>
+          <h3>{ord + 1}</h3>
         </Rank>
-        <Message>
-          <h3>김힘찬</h3>
-          <h3>안녕 힘찬아</h3>
+        <Message highlight={highlight}>
+          <h4>{name}</h4>
+          <h4>{message}</h4>
         </Message>
       </Container>
     </>
@@ -28,15 +30,18 @@ const Container = styled.div`
 
 const Rank = styled.div`
   width: 20%;
-  background-color: yellow;
+  border: dashed 1px grey;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-right: none;
+  background-color: ${(props) => (props.highlight ? "lightsalmon" : "none")};
 `;
 
 const Message = styled.div`
-  width: 60%;
-  background-color: green;
+  width: 50%;
+  border: dashed 1px grey;
   text-align: left;
-  padding-left: 20px;
+  padding: 10px 20px;
+  background-color: ${(props) => (props.highlight ? "lightsalmon" : "none")};
 `;

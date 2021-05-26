@@ -2,27 +2,45 @@ import React from "react";
 import styled from "styled-components";
 import SwipeItem from "./SwipeItem";
 
-//
+import Score from "./Score";
+
+import { useSelector, useDispatch } from "react-redux";
+import { addAnswer } from "../redux/modules/quiz";
+
 const Quiz = (props) => {
-  console.log(props);
-  // state로 관리하자!
-  const [num, setNum] = React.useState(0);
+  const dispatch = useDispatch();
+  const answers = useSelector((state) => state.quiz.answers);
+  const quiz = useSelector((state) => state.quiz.quiz);
+  const num = answers.length;
 
   const onSwipe = (direction) => {
-    console.log("You swiped: " + direction);
-    setNum(num + 1);
+    let _answer = direction === "left" ? "O" : "X";
+    if (_answer === quiz[num].answer) {
+      // 정답일 경우,
+      dispatch(addAnswer(true));
+    } else {
+      // 오답일 경우,
+      dispatch(addAnswer(false));
+    }
   };
 
-  if (num > 10) {
-    return <div>퀴즈 끝!</div>;
+  if (num > quiz.length - 1) {
+    return <Score {...props} />;
+    // return <div>퀴즈 끝!</div>;
   }
 
   return (
     <QuizContainer>
+      <ProgressBG>
+        <Highlight
+          width={(answers.length / quiz.length) * 100 + "%"}
+        ></Highlight>
+        <Ball></Ball>
+      </ProgressBG>
       <p>
         <span>{num + 1}번 문제</span>
       </p>
-      {props.list.map((l, idx) => {
+      {quiz.map((l, idx) => {
         if (num === idx) {
           return <Question key={idx}>{l.question}</Question>;
         }
@@ -33,7 +51,7 @@ const Quiz = (props) => {
         <Answer>{" X"}</Answer>
       </AnswerZone>
 
-      {props.list.map((l, idx) => {
+      {quiz.map((l, idx) => {
         if (idx === num) {
           return <SwipeItem key={idx} onSwipe={onSwipe} />;
         }
@@ -73,22 +91,32 @@ const Answer = styled.div`
   color: #dadafc77;
 `;
 
-const DragItem = styled.div`
+const ProgressBG = styled.div`
+  width: 80%;
+  height: 5vh;
+  background-color: lightgray;
+  margin: auto;
+  border-radius: 20px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  /* width: 100vw; */
-  /* height: 100vh; */
+`;
 
-  & > div {
-    border-radius: 500px;
-    background-color: #ffd6aa;
-  }
-  & img {
-    max-width: 150px;
-  }
+const Highlight = styled.div`
+  width: ${(props) => props.width};
+  height: 5vh;
+  background-color: blue;
+  border-radius: 20px;
+  transition: 0.5s;
+`;
+
+const Ball = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: solid 3px black;
+  background-color: white;
+  position: relative;
+  left: -20px;
 `;
 export default Quiz;

@@ -32,6 +32,7 @@ const SwipeItem = React.memo(({ onSwipe }) => {
     };
 
     const touchStart = (e) => {
+      e.preventDefault();
       //   console.log("start");
 
       // 터치 시작 시, swipe_status를 touchstart로 변경해줍니다.
@@ -53,6 +54,7 @@ const SwipeItem = React.memo(({ onSwipe }) => {
     };
 
     const touchEnd = (e) => {
+      e.preventDefault();
       swipe_status = "touchend";
       //  touchEnd이벤트는 touches 대신, changedTouches가 있어요.
       //   console.log(e.changedTouches[0]);
@@ -101,7 +103,7 @@ const SwipeItem = React.memo(({ onSwipe }) => {
 
     const touchMove = (e) => {
       // 스와이프 중 다른 이벤트가 발생하는 것을 막아줍니다
-      //   e.preventDefault();
+      e.preventDefault();
 
       //   console.log("in touch move!");
       // 현재 좌표(이동 중인 좌표)를 기록해줍니다.
@@ -159,8 +161,8 @@ const DragItem = styled.div`
   align-items: center;
   justify-content: center;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 30px;
+  left: 20px;
   width: 100vw;
   height: 100vh;
 

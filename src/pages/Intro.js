@@ -2,15 +2,29 @@ import React from "react";
 
 import styled from "styled-components";
 
-const Intro = ({ name }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { addUserName } from "../redux/modules/rank";
+
+const Intro = (props) => {
+  const dispatch = useDispatch();
+  const name = useSelector((state) => state.quiz.name);
+  const input_text = React.useRef(null);
+
   return (
     <Container>
       <Img />
-      <h1 style={{ fontSize: "40px", marginTop: "40px" }}>
+      <h1 style={{ fontSize: "30px", marginTop: "40px" }}>
         나는 <Text>{name}</Text>에 대해 <br></br>얼마나 알고 있을까 ?
       </h1>
-      <Input placeholder="내 이름" />
-      <Btn>시작하기</Btn>
+      <Input placeholder="내 이름" ref={input_text} />
+      <Btn
+        onClick={() => {
+          dispatch(addUserName(input_text.current.value));
+          props.history.push("/quiz");
+        }}
+      >
+        시작하기
+      </Btn>
     </Container>
   );
 };
